@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MyUniverse – Explore the Solar System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05030f;--ink:#f1ecff;--mute:#a79fc9;--glass:rgba(30,20,70,.55);--line:rgba(180,160,255,.22);--hot:#ffb347;--pink:#ff6ec7;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:radial-gradient(120% 80% at 50% 0%,#1a0f4a 0%,#0a0620 45%,var(--bg) 100%);color:var(--ink);font:16px/1.6 'DM Sans',system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+#stars{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+main,header{position:relative;z-index:1}
+header{display:flex;justify-content:space-between;align-items:center;padding:18px clamp(16px,4vw,48px)}
+.logo{font:800 1.4rem 'Bricolage Grotesque',sans-serif;letter-spacing:.02em;background:linear-gradient(90deg,var(--hot),var(--pink),#8f7bff);-webkit-background-clip:text;background-clip:text;color:transparent}
+button{font:inherit;color:inherit;cursor:pointer}
+.tog{background:var(--glass);border:1px solid var(--line);border-radius:99px;padding:8px 16px;backdrop-filter:blur(8px);transition:.25s}
+.tog:hover{border-color:var(--hot);box-shadow:0 0 18px rgba(255,179,71,.35)}
+:focus-visible{outline:2px solid var(--hot);outline-offset:3px}
+.hero{text-align:center;padding:10px 20px 0}
+h1{font:800 clamp(2.4rem,7.5vw,5.4rem)/1 'Bricolage Grotesque',sans-serif;margin:.1em 0 .2em;letter-spacing:-.02em;text-shadow:0 0 40px rgba(143,123,255,.6)}
+.hero p{max-width:34em;margin:0 auto;color:var(--mute);font-size:1.1rem}
+.rocket{display:inline-block;animation:fly 3s ease-in-out infinite}
+@keyframes fly{50%{transform:translate(8px,-8px) rotate(6deg)}}
+.stage-wrap{display:flex;justify-content:center;padding:clamp(24px,5vw,48px) 0}
+.stage{--s:min(88vw,74vh,740px);position:relative;width:var(--s);height:var(--s)}
+.sun{position:absolute;left:44.5%;top:44.5%;width:11%;height:11%;border-radius:50%;background:radial-gradient(circle at 40% 38%,#fff6c4,#ffc547 45%,#ff7a1a 100%);box-shadow:0 0 30px 10px rgba(255,170,50,.7),0 0 120px 50px rgba(255,110,30,.35);animation:pulse 4s ease-in-out infinite;cursor:pointer;border:0;padding:0}
+@keyframes pulse{50%{box-shadow:0 0 44px 16px rgba(255,170,50,.85),0 0 160px 70px rgba(255,110,30,.4)}}
+.ring{position:absolute;border-radius:50%;border:1px dashed rgba(180,160,255,.18);width:calc(var(--d)*1%);height:calc(var(--d)*1%);left:calc(50% - var(--d)*.5%);top:calc(50% - var(--d)*.5%);animation:spin var(--t) linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.paused .ring,.paused .pl{animation-play-state:paused}
+.pl{position:absolute;left:50%;top:0;width:calc(var(--s)*var(--z)/100);height:calc(var(--s)*var(--z)/100);margin:calc(var(--s)*var(--z)/-200) 0 0 calc(var(--s)*var(--z)/-200);border-radius:50%;border:0;padding:0;background:radial-gradient(circle at 32% 30%,var(--c1),var(--c2) 55%,var(--c3));box-shadow:0 0 14px 2px var(--g),0 0 40px 8px color-mix(in srgb,var(--g) 40%,transparent);animation:unspin var(--t) linear infinite;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+@keyframes unspin{to{transform:rotate(-360deg)}}
+.pl:hover,.pl.on{transform:scale(1.5)}
+.pl.on{box-shadow:0 0 24px 6px var(--g),0 0 80px 20px var(--g)}
+.pl .tag{position:absolute;top:130%;left:50%;transform:translateX(-50%);font-size:.75rem;white-space:nowrap;opacity:0;transition:.25s;pointer-events:none;text-shadow:0 0 6px #000}
+.pl:hover .tag,.pl.on .tag{opacity:1}
+.saturn::before{content:"";position:absolute;left:-55%;right:-55%;top:32%;bottom:32%;border-radius:50%;border:calc(var(--s)*.007) solid rgba(240,215,160,.75);transform:rotate(-18deg);box-shadow:0 0 10px rgba(240,215,160,.5)}
+.chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:0 16px 8px}
+.chip{display:flex;align-items:center;gap:8px;background:var(--glass);border:1px solid var(--line);border-radius:99px;padding:7px 14px 7px 8px;backdrop-filter:blur(8px);transition:.25s}
+.chip i{width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 32% 30%,var(--c1),var(--c2) 60%,var(--c3));box-shadow:0 0 10px var(--g)}
+.chip:hover,.chip.on{border-color:var(--g);box-shadow:0 0 22px color-mix(in srgb,var(--g) 55%,transparent);transform:translateY(-2px)}
+.panel{max-width:1000px;margin:28px auto 0;padding:0 16px}
+.card{display:grid;grid-template-columns:minmax(150px,260px) 1fr;gap:clamp(18px,4vw,44px);align-items:center;background:var(--glass);border:1px solid var(--line);border-radius:28px;padding:clamp(20px,4vw,40px);backdrop-filter:blur(14px);box-shadow:0 20px 80px rgba(0,0,0,.5),inset 0 0 60px color-mix(in srgb,var(--g) 14%,transparent);animation:swap .55s cubic-bezier(.2,.9,.3,1)}
+@keyframes swap{from{opacity:0;transform:translateY(18px) scale(.98)}}
+.big{aspect-ratio:1;width:100%;border-radius:50%;background:radial-gradient(circle at 32% 30%,var(--c1),var(--c2) 55%,var(--c3));box-shadow:0 0 60px 10px var(--g),0 0 160px 40px color-mix(in srgb,var(--g) 35%,transparent);animation:bob 6s ease-in-out infinite;position:relative;max-width:240px;margin:auto}
+@keyframes bob{50%{transform:translateY(-10px)}}
+.big.saturn::before{left:-45%;right:-45%;top:35%;bottom:35%;border-width:8px}
+.card h2{font:800 clamp(2rem,5vw,3.2rem)/1 'Bricolage Grotesque',sans-serif;margin:0 0 6px}
+.kind{color:var(--g);margin:0 0 14px;font-weight:500}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:16px 0}
+.stat{background:rgba(255,255,255,.05);border-radius:14px;padding:10px 12px}
+.stat b{display:block;font-size:1.05rem}.stat span{color:var(--mute);font-size:.82rem}
+.fact{min-height:3.4em;margin:6px 0 14px;font-size:1.08rem}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.btn{background:linear-gradient(90deg,#6a4cff,var(--pink));border:0;border-radius:99px;padding:10px 20px;font-weight:700;box-shadow:0 0 22px rgba(255,110,199,.4);transition:.25s}
+.btn:hover{transform:translateY(-2px) scale(1.04)}
+.btn.alt{background:var(--glass);border:1px solid var(--line);box-shadow:none}
+.scale{max-width:1000px;margin:28px auto 0;padding:0 16px}
+.scale .in{background:var(--glass);border:1px solid var(--line);border-radius:24px;padding:22px clamp(18px,4vw,32px);display:flex;gap:18px;align-items:center;flex-wrap:wrap;backdrop-filter:blur(12px)}
+.scale h3{margin:0;font:800 1.3rem 'Bricolage Grotesque',sans-serif;flex:1 1 220px}
+.scale input{width:110px;background:rgba(0,0,0,.35);border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:10px 12px;font:inherit}
+.scale output{flex:1 1 100%;color:var(--mute)}.scale output b{color:var(--hot)}
+footer{text-align:center;color:var(--mute);padding:40px 16px 30px;font-size:.9rem}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,40px);opacity:0;background:var(--glass);border:1px solid var(--line);padding:10px 18px;border-radius:99px;backdrop-filter:blur(10px);transition:.4s;z-index:5;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:640px){.card{grid-template-columns:1fr;text-align:center}.big{max-width:170px}.row{justify-content:center}.pl .tag{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:0s!important;animation-iteration-count:1!important}.sun{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+<header>
+  <div class="logo">MyUniverse</div>
+  <button class="tog" id="pause" aria-pressed="false">⏸ Pause orbits</button>
+</header>
+<main>
+  <section class="hero">
+    <h1>Welcome to your<br>own little cosmos <span class="rocket">🚀</span></h1>
+    <p>Eight planets, one very hot star, zero gravity for your worries. Tap a planet to land on it.</p>
+  </section>
+
+  <div class="stage-wrap"><div class="stage" id="stage" aria-label="Animated solar system">
+    <button class="sun" id="sun" aria-label="The Sun"></button>
+  </div></div>
+
+  <nav class="chips" id="chips" aria-label="Choose a planet"></nav>
+
+  <section class="panel" id="panel" aria-live="polite"></section>
+
+  <section class="scale">
+    <div class="in">
+      <h3>⚖️ Cosmic scale: what would you weigh?</h3>
+      <label>Your weight (kg) <input id="kg" type="number" min="1" max="500" value="60"></label>
+      <output id="wout"></output>
+    </div>
+  </section>
+</main>
+<footer>Made with stardust · MyUniverse · Orbits are sped up and not to scale (space is really, really big).</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const P=[
+{n:"Mercury",e:"☿",k:"The speedy little scorcher",c:["#e6dccf","#a8998a","#4d4338"],g:"#c9b8a3",z:2.3,d:26,t:9,gr:.38,day:"59 Earth days",yr:"88 days",moons:0,temp:"-180 to 430 °C",dist:"58 million km",
+f:["Mercury zips around the Sun in just 88 days, so its birthday party comes around fast.","It has almost no atmosphere, so it swings from scorching days to freezing nights.","Mercury is only a little bigger than Earth's Moon, and it's covered in craters.","Its day (sunrise to sunrise) lasts about 176 Earth days, longer than its year!"],j:"Mercury's yearly fitness goal: 4 laps of the Sun per Earth year. Overachiever."},
+{n:"Venus",e:"♀",k:"The hot, cloudy show-off",c:["#fff0c9","#e8b866","#8a5a1f"],g:"#ffc873",z:3.3,d:36,t:15,gr:.91,day:"243 Earth days",yr:"225 days",moons:0,temp:"about 465 °C",dist:"108 million km",
+f:["Venus is the hottest planet, hotter than Mercury, thanks to a thick carbon dioxide blanket.","It spins backwards compared with most planets, so the Sun rises in the west.","One Venus day is longer than a Venus year. Calendar makers cried.","Clouds of sulfuric acid wrap the planet. Not a vacation spot."],j:"Venus is basically Earth's twin that decided to live inside an oven."},
+{n:"Earth",e:"🌍",k:"Home sweet home",c:["#bfe6ff","#2f7fe0","#0c2a63"],g:"#5cb6ff",z:3.5,d:46,t:21,gr:1,day:"24 hours",yr:"365.25 days",moons:1,temp:"avg 15 °C",dist:"150 million km",
+f:["About 71% of Earth is covered in water, which is why it looks so blue from space.","Earth is the only place we know of that has life. You're a rare thing!","Earth zooms around the Sun at roughly 30 kilometres every second.","Our Moon is slowly drifting away, about 3.8 cm each year."],j:"You are here. Yes, literally the only 'you are here' sign in the galaxy."},
+{n:"Mars",e:"♂",k:"The dusty red adventurer",c:["#ffc4a3","#d4552b","#5e1d0b"],g:"#ff7a4d",z:2.7,d:56,t:30,gr:.38,day:"24 h 37 min",yr:"687 days",moons:2,temp:"-60 °C average",dist:"228 million km",
+f:["Mars is red because its soil is full of rusty iron oxide.","Olympus Mons is the tallest known volcano in the Solar System, about 22 km high.","Mars has two tiny moons, Phobos and Deimos, shaped like lumpy potatoes.","Robot rovers are the only residents so far, and they send great postcards."],j:"Mars is just Earth after skipping the water, the air, and leg day."},
+{n:"Jupiter",e:"♃",k:"The giant with a storm problem",c:["#fff0dc","#d9a066","#6b3d1c"],g:"#ffbd80",z:8.4,d:70,t:48,gr:2.53,day:"about 10 hours",yr:"11.9 Earth years",moons:"95+",temp:"-110 °C (cloud tops)",dist:"778 million km",
+f:["Jupiter is so big that all the other planets would fit inside it.","The Great Red Spot is a storm wider than Earth that has raged for centuries.","It spins faster than any other planet: a day lasts under 10 hours.","Jupiter has dozens of moons, including Europa, which hides an ocean under its ice."],j:"Jupiter: the planet that never skipped a meal. Or a moon."},
+{n:"Saturn",e:"♄",k:"The fashionable ring master",saturn:1,c:["#fff6d6","#e8cf8f","#8a7036"],g:"#f2d98a",z:6.4,d:81,t:66,gr:1.07,day:"about 10.7 hours",yr:"29.4 Earth years",moons:"140+",temp:"-140 °C (cloud tops)",dist:"1.4 billion km",
+f:["Saturn's rings are mostly chunks of water ice, from dust grains to house-sized boulders.","Saturn is the least dense planet; it would float in a (very large) bathtub.","The rings span hundreds of thousands of km but are often only about 10 metres thick.","Its moon Titan has thick air, lakes and rivers of liquid methane."],j:"Saturn wears the biggest accessory in the Solar System, and it never goes out of style."},
+{n:"Uranus",e:"⛢",k:"The sideways icy oddball",c:["#e3ffff","#7fdcdc","#2a6e78"],g:"#7fe9ea",z:4.6,d:91,t:86,gr:.89,day:"about 17 hours",yr:"84 Earth years",moons:28,temp:"-224 °C",dist:"2.9 billion km",
+f:["Uranus rolls around the Sun tipped on its side, like a ball rolling in its orbit.","Methane in its atmosphere filters out red light and gives it that cyan colour.","It's an 'ice giant', made mostly of water, ammonia and methane ices above a small core.","It has faint rings and moons named after Shakespeare characters."],j:"Uranus hit the snooze button on its axis a long time ago and never got back up."},
+{n:"Neptune",e:"♆",k:"The deep-blue wind machine",c:["#c7d8ff","#3f5fe8","#111c6b"],g:"#6f8bff",z:4.4,d:100,t:106,gr:1.14,day:"about 16 hours",yr:"165 Earth years",moons:16,temp:"-214 °C",dist:"4.5 billion km",
+f:["Neptune has the fastest winds in the Solar System, over 2,000 km/h.","It was found using maths before telescopes spotted it, in 1846.","Neptune has completed only one lap around the Sun since its discovery.","Its big moon Triton orbits backwards and has icy geysers."],j:"Neptune is so far away that even its mail gets a 4-hour delay (sunlight takes ~4 h to arrive)."}
+];
+const $=s=>document.querySelector(s);
+const st=$('#stage'),chips=$('#chips'),panel=$('#panel');
+let cur=-1,fi=0;
+function sty(p){return `--c1:${p.c[0]};--c2:${p.c[1]};--c3:${p.c[2]};--g:${p.g}`}
+P.forEach((p,i)=>{
+  const r=document.createElement('div');r.className='ring';r.style.cssText=`--d:${p.d};--t:${p.t}s;animation-delay:${-i*7}s`;
+  r.innerHTML=`<button class="pl ${p.saturn?'saturn':''}" data-i="${i}" aria-label="${p.n}" style="${sty(p)};--z:${p.z};--t:${p.t}s;animation-delay:${-i*7}s"><span class="tag">${p.n}</span></button>`;
+  st.appendChild(r);
+  const c=document.createElement('button');c.className='chip';c.dataset.i=i;c.style.cssText=sty(p);c.innerHTML=`<i></i>${p.n}`;chips.appendChild(c);
+});
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('show'),3200)}
+function pick(i,scroll){
+  cur=i;fi=0;const p=P[i];
+  document.querySelectorAll('.pl,.chip').forEach(e=>e.classList.toggle('on',+e.dataset.i===i));
+  panel.innerHTML=`<article class="card" style="${sty(p)}">
+    <div class="big ${p.saturn?'saturn':''}"></div>
+    <div><h2>${p.n}</h2><p class="kind">${p.k}</p>
+    <div class="stats">
+      <div class="stat"><b>${p.dist}</b><span>from the Sun</span></div>
+      <div class="stat"><b>${p.day}</b><span>one day</span></div>
+      <div class="stat"><b>${p.yr}</b><span>one year</span></div>
+      <div class="stat"><b>${p.moons}</b><span>moons</span></div>
+      <div class="stat"><b>${p.temp}</b><span>temperature</span></div>
+    </div>
+    <p class="fact" id="fact">${p.f[0]}</p>
+    <div class="row"><button class="btn" id="more">Another fact</button><button class="btn alt" id="joke">Make me laugh</button><button class="btn alt" id="next">Next planet</button></div></div></article>`;
+  $('#more').onclick=()=>{fi=(fi+1)%p.f.length;swap(p.f[fi])};
+  $('#joke').onclick=()=>swap('😄 '+p.j);
+  $('#next').onclick=()=>pick((i+1)%8,true);
+  upd();
+  if(scroll)panel.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function swap(t){const f=$('#fact');f.style.transition='opacity .2s';f.style.opacity=0;setTimeout(()=>{f.textContent=t;f.style.opacity=1},200)}
+st.addEventListener('click',e=>{const b=e.target.closest('.pl');if(b)pick(+b.dataset.i,true)});
+chips.addEventListener('click',e=>{const b=e.target.closest('.chip');if(b)pick(+b.dataset.i,true)});
+$('#sun').onclick=()=>toast('☀️ The Sun holds 99.8% of the Solar System\'s mass. Slightly bossy.');
+const pb=$('#pause');pb.onclick=()=>{const x=st.classList.toggle('paused');pb.setAttribute('aria-pressed',x);pb.textContent=x?'▶ Resume orbits':'⏸ Pause orbits'};
+function upd(){
+  const kg=+$('#kg').value||0;
+  $('#wout').innerHTML=(cur<0?'Pick a planet above, then check your weight there. Right now on Earth: ':'')+(cur<0?`<b>${kg} kg</b>`:`On <b>${P[cur].n}</b> you would weigh <b>${(kg*P[cur].gr).toFixed(1)} kg</b>. ${P[cur].gr>1.5?'Skip the snacks!':P[cur].gr<.5?'Hello, superhero jumps!':'Pretty familiar.'}`);
+}
+$('#kg').oninput=upd;upd();
+/* starfield */
+const cv=$('#stars'),x=cv.getContext('2d');let W,H,S=[],sh=null,mx=0,my=0;
+function size(){W=cv.width=innerWidth;H=cv.height=innerHeight;S=Array.from({length:Math.min(260,W*H/6000|0)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+.2,p:Math.random()*6,s:Math.random()*.02+.005,d:Math.random()*.6+.2}))}
+addEventListener('resize',size);size();
+addEventListener('pointermove',e=>{mx=e.clientX/W-.5;my=e.clientY/H-.5});
+const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function loop(t){
+  x.clearRect(0,0,W,H);
+  for(const s of S){const a=.45+.55*Math.sin(t*s.s+s.p);x.globalAlpha=a;x.fillStyle=s.r>1.1?'#cfc4ff':'#fff';x.beginPath();x.arc((s.x-mx*30*s.d+W)%W,(s.y-my*30*s.d+H)%H,s.r,0,6.3);x.fill()}
+  if(!sh&&Math.random()<.004&&!calm)sh={x:Math.random()*W,y:Math.random()*H*.4,l:0};
+  if(sh){sh.l+=1;const px=sh.x+sh.l*9,py=sh.y+sh.l*4;const g=x.createLinearGradient(px,py,px-90,py-40);g.addColorStop(0,'rgba(255,255,255,.9)');g.addColorStop(1,'rgba(255,255,255,0)');x.globalAlpha=1;x.strokeStyle=g;x.lineWidth=2;x.beginPath();x.moveTo(px,py);x.lineTo(px-90,py-40);x.stroke();if(sh.l>70)sh=null}
+  requestAnimationFrame(loop)
+}
+requestAnimationFrame(loop);
+setTimeout(()=>toast('✨ Tap any planet to explore it'),1200);
+</script>
+</body>
+</html>
